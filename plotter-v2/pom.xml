@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>positional-tracker</groupId>
+  <artifactId>plotter-v2</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>plotter-v2</name>
+  <url>http://maven.apache.org</url>
+  
+  <repositories>
+  <repository>
+     <id>jzy3d-snapshots</id>
+     <name>Jzy3d Snapshots</name>
+     <url>http://www.jzy3d.org/maven/snapshots</url>
+  </repository>
+  <repository>
+     <id>jzy3d-releases</id>
+     <name>Jzy3d Snapshots</name>
+     <url>http://www.jzy3d.org/maven/releases</url>
+  </repository>
+</repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+        
+        
+<dependency>
+    <groupId>org.jzy3d</groupId>
+    <artifactId>jzy3d-api</artifactId>
+    <version>0.9.1</version>
+    
+    
+</dependency>
+        
+        
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>
