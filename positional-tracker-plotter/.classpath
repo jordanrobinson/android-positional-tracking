@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/gluegen-2.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/gluegen-rt-2.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/gluegen-rt-main-2.0-rc11.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/joal-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/jocl-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/jogl-all-2.1.1.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/jzy3d-api-0.9.1.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/opencsv-2.3.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/org.jzy3d-0.9.jar"/>
+	<classpathentry kind="lib" path="D:/0/0/Apps/adt-bundle-windows-x86_64-20130917/workspace/positional-tracker-plotter/lib/gluegen-2.1.1-natives-windows-amd64.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
