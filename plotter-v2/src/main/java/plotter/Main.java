@@ -81,14 +81,14 @@ public class Main extends AbstractAnalysis {
 	public static void main(String[] args) throws Exception {
 
 		Main main = new Main();
-		
+
 		main.printAllDataSeparated();
 
 		//System.out.println(main.rawReadingsOutput(main.getReadings()));
 		//System.out.println();
 		//System.out.println();
-		
-		
+
+
 
 		//
 		//		AnalysisLauncher.open(main);
@@ -104,46 +104,64 @@ public class Main extends AbstractAnalysis {
 		//		}
 
 	}
-	
+
 	public void printAllDataSeparated() {
 		Main main = new Main();
 		ArrayList<Reading> readings = main.removeDupes(main.getReadings());
-		System.out.println("\n\nAccelerometer\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_ACCELEROMETER));
-		System.out.println("\n\nMagnetic Field\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_MAGNETIC_FIELD));
-		System.out.println("\n\nOrientation\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_ORIENTATION));
-		System.out.println("\n\nGyroscope\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_GYROSCOPE));
-		System.out.println("\n\nLight\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_LIGHT));
-		System.out.println("\n\nPressure\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_PRESSURE));
-		System.out.println("\n\nTemperature\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_TEMPERATURE));
-		System.out.println("\n\nProximity\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_PROXIMITY));
-		System.out.println("\n\nGravity\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_GRAVITY));
-		System.out.println("\n\nLinear Acceleration\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_LINEAR_ACCELERATION));
-		System.out.println("\n\nRotation Vector\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_ROTATION_VECTOR));
-		System.out.println("\n\nRelative Humidity\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_RELATIVE_HUMIDITY));
-		System.out.println("\n\nAmbient Temperature\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_AMBIENT_TEMPERATURE));
-		System.out.println("\n\nMagnetic Uncalibrated\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_MAGNETIC_FIELD_UNCALIBRATED));
-		System.out.println("\n\nGame Rotation\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_GAME_ROTATION_VECTOR));
-		System.out.println("\n\nUncalibrated Gyroscope\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_GYROSCOPE_UNCALIBRATED));
-		System.out.println("\n\nSignificant Motion\n\n");
-		System.out.println(main.cumulativeTextOutput(readings, TYPE_SIGNIFICANT_MOTION));
+
+		ArrayList<ArrayList<Reading>> allReadings = new ArrayList<ArrayList<Reading>>();
+
+		int[] types = {TYPE_ACCELEROMETER,
+				TYPE_MAGNETIC_FIELD,
+				TYPE_ORIENTATION,
+				TYPE_GYROSCOPE,
+				TYPE_LIGHT,
+				TYPE_PRESSURE,
+				TYPE_TEMPERATURE,
+				TYPE_PROXIMITY,
+				TYPE_GRAVITY,
+				TYPE_LINEAR_ACCELERATION,
+				TYPE_ROTATION_VECTOR,
+				TYPE_RELATIVE_HUMIDITY,
+				TYPE_AMBIENT_TEMPERATURE,
+				TYPE_MAGNETIC_FIELD_UNCALIBRATED,
+				TYPE_GAME_ROTATION_VECTOR,
+				TYPE_GYROSCOPE_UNCALIBRATED,
+				TYPE_SIGNIFICANT_MOTION}; 
+
+		String[] stringTypes = {"TYPE_ACCELEROMETER","TYPE_MAGNETIC_FIELD","TYPE_ORIENTATION","TYPE_GYROSCOPE",
+				"TYPE_LIGHT","TYPE_PRESSURE","TYPE_TEMPERATURE","TYPE_PROXIMITY","TYPE_GRAVITY",
+				"TYPE_LINEAR_ACCELERATION","TYPE_ROTATION_VECTOR","TYPE_RELATIVE_HUMIDITY",
+				"TYPE_AMBIENT_TEMPERATURE","TYPE_MAGNETIC_FIELD_UNCALIBRATED","TYPE_GAME_ROTATION_VECTOR",
+				"TYPE_GYROSCOPE_UNCALIBRATED","TYPE_SIGNIFICANT_MOTION"};
+
+		String headings = "";
 		
-		
+		cumulativeMode = false;
+
+
+		for (int i = 0; i < types.length; i++) {
+			ArrayList<Reading> currentReadings = filterReadings(readings, types[i]);
+
+			if (currentReadings.size() > 0) {
+
+				headings += stringTypes[i];
+				headings += ",X,Y,Z,";
+
+				if (cumulativeMode) {
+					allReadings.add(cumulativeReadingOutput(filterReadings(readings, types[i]), types[i]));	
+				}
+				else {
+					allReadings.add(filterReadings(readings, types[i]));
+				}
+
+			}
+		}
+
+		System.out.println(headings);
+
+		System.out.println(CSVOutput(allReadings));
+
 
 	}
 
@@ -218,6 +236,16 @@ public class Main extends AbstractAnalysis {
 		return ret;
 	}
 
+	public ArrayList<Reading> filterReadings(ArrayList<Reading> readings, int type) {
+		ArrayList<Reading> ret = new ArrayList<Reading>();
+		for (int i = 0; i < readings.size(); i++) {
+			if (readings.get(i).getSensor() == type) {
+				ret.add(readings.get(i));
+			}
+		}
+		return ret;
+	}
+
 	public ArrayList<Reading> getReadings() {
 
 		ArrayList<Reading> ret = new ArrayList<Reading>();
@@ -249,7 +277,7 @@ public class Main extends AbstractAnalysis {
 
 				boolean important = results.getBoolean("important");
 
-				int accuracy = results.getInt("accuracy");				
+				int accuracy = results.getInt("accuracy");
 				ret.add(new Reading(id, sensor, collectTime, device, readings, important, accuracy));
 			}
 
@@ -279,15 +307,15 @@ public class Main extends AbstractAnalysis {
 
 		for (int i = 0; i < readings.size(); i++) {
 			if (readings.get(i).getSensor() == type) {
-				
+
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(new Date(readings.get(i).getCollectTime() / 1000000)); //converts to millis from nanos
 				int minutes = calendar.get(Calendar.MINUTE);
 				int seconds = calendar.get(Calendar.SECOND);
 				int millis = calendar.get(Calendar.MILLISECOND);
-				
+
 				String dateFormat = "";
-				
+
 				if (minutes < 10 && seconds < 10) {
 					dateFormat = "0" + minutes + ":0" + seconds + "." + millis + "";
 				}
@@ -300,36 +328,111 @@ public class Main extends AbstractAnalysis {
 				else {
 					dateFormat = "" + minutes + ":" + seconds + "." + millis + "";
 				}
-				
-				
-				
+
 				ret += dateFormat; 
 				cumulativeX += readings.get(i).getReadings().get(0);
 				cumulativeY += readings.get(i).getReadings().get(1);
 				cumulativeZ += readings.get(i).getReadings().get(2);
-				
+
 				ret += "," + doubleFormatter(cumulativeX);
 				ret += " ," + doubleFormatter(cumulativeY);
-				ret += " ," + doubleFormatter(cumulativeZ) + "\n";				
+				ret += " ," + doubleFormatter(cumulativeZ) + "\n";
 			}
 
 		}
 
 		return ret;
 	}
-	
+
+	public ArrayList<Reading> cumulativeReadingOutput(ArrayList<Reading> readings, int type) {
+
+		Double cumulativeX = 0.0D;
+		Double cumulativeY = 0.0D;
+		Double cumulativeZ = 0.0D;
+
+		for (int i = 0; i < readings.size(); i++) {
+			if (readings.get(i).getSensor() == type) {
+
+				cumulativeX += readings.get(i).getReadings().get(0);
+				cumulativeY += readings.get(i).getReadings().get(1);
+				cumulativeZ += readings.get(i).getReadings().get(2);
+
+				ArrayList<Double> newValues = new ArrayList<Double>();
+
+				newValues.add(cumulativeX);
+				newValues.add(cumulativeY);
+				newValues.add(cumulativeZ);
+
+				readings.get(i).setReadings(newValues);
+			}
+		}
+
+		return readings;
+	}
+
+	public String CSVOutput(ArrayList<ArrayList<Reading>> readingsArrays) {
+		String ret = "";
+		Calendar calendar = Calendar.getInstance();
+
+
+		int size = 0;
+		for (int j = 0; j < readingsArrays.size(); j++) {
+			if (readingsArrays.get(j).size() > size) {
+				size = readingsArrays.get(j).size();
+			}
+		}
+
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < readingsArrays.size(); j++) {
+				int currentSize = readingsArrays.get(j).size();
+
+				if (i < currentSize) {
+					calendar.setTime(new Date(readingsArrays.get(j).get(i).getCollectTime() / 1000000)); //converts to millis from nanos
+					int minutes = calendar.get(Calendar.MINUTE);
+					int seconds = calendar.get(Calendar.SECOND);
+					int millis = calendar.get(Calendar.MILLISECOND);
+
+					String dateFormat = "";
+
+					if (minutes < 10 && seconds < 10) {
+						dateFormat = "0" + minutes + ":0" + seconds + "." + millis + "";
+					}
+					else if (minutes < 10) { 
+						dateFormat = "0" + minutes + ":" + seconds + "." + millis + "";
+					}
+					else if (seconds < 10) {
+						dateFormat = "" + minutes + ":0" + seconds + "." + millis + "";
+					}
+					else {
+						dateFormat = "" + minutes + ":" + seconds + "." + millis + "";
+					}
+
+					ret += dateFormat; 
+					ret += "," + doubleFormatter(readingsArrays.get(j).get(i).getReadings().get(0));
+					ret += "," + doubleFormatter(readingsArrays.get(j).get(i).getReadings().get(1));
+					ret += "," + doubleFormatter(readingsArrays.get(j).get(i).getReadings().get(2));
+				}
+				else {
+					ret += ",,,";
+				}
+				ret += ",";
+			}
+			ret += "\n";
+		}
+
+		return ret;
+	}
+
 	public String doubleFormatter(Double doub) {
 		String ret = "";
 		if (doub >= 0.0D) {
-			ret = String.format("+%1.10f", doub);			
+			ret = String.format("+%1.10f", doub);
 		}
 		else {
 			ret = String.format("%1.10f", doub);
 		}
 		return ret;
 	}
-
-
 
 	public int inputFromDbCumulative() {
 
