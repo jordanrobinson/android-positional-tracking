@@ -69,13 +69,16 @@ public class Main extends AbstractAnalysis {
 	private static final Color GYROSCOPE_COLOR = new Color(0.1f, 0.7f, 0.1f, ALPHA);
 	private static final Color GRAVITY_COLOR = new Color(0.7f, 0.7f, 0.7f, ALPHA);
 	private static final Color ACCELERATION_COLOR = new Color(0.7f, 0.1f, 0.7f, ALPHA);
-
+	
+	private static String DATE = "2014-02-15";
+	
+	private static String DATE_QUERY = "SELECT * FROM positional.positionalData WHERE (collect_time / 1000000000) > UNIX_TIMESTAMP('" + DATE + "') ORDER BY collect_time ASC;";
+	private static String ALL_QUERY = "SELECT * FROM positional.positionalData ORDER BY collect_time ASC;";
+	private static boolean DATE_LIMIT = true;
+	private static boolean CUMULATIVE_MODE = true;
+	
 	private Coord3d[] coords;
 	private Color[] colors;
-
-	private boolean cumulativeMode = false;
-
-
 
 
 	public static void main(String[] args) throws Exception {
@@ -137,7 +140,7 @@ public class Main extends AbstractAnalysis {
 
 		String headings = "";
 		
-		cumulativeMode = false;
+		CUMULATIVE_MODE = false;
 
 
 		for (int i = 0; i < types.length; i++) {
@@ -148,7 +151,7 @@ public class Main extends AbstractAnalysis {
 				headings += stringTypes[i];
 				headings += ",X,Y,Z,";
 
-				if (cumulativeMode) {
+				if (CUMULATIVE_MODE) {
 					allReadings.add(cumulativeReadingOutput(filterReadings(readings, types[i]), types[i]));	
 				}
 				else {
@@ -169,8 +172,8 @@ public class Main extends AbstractAnalysis {
 
 		if (chart == null) {
 			this.chart = AWTChartComponentFactory.chart(Quality.Advanced, "newt");
-			cumulativeMode = true;
-			if (cumulativeMode) {
+			CUMULATIVE_MODE = true;
+			if (CUMULATIVE_MODE) {
 				inputFromDbCumulative();
 			}
 			else {
@@ -257,9 +260,14 @@ public class Main extends AbstractAnalysis {
 			connection = DriverManager.getConnection(DB_URL, "root", "password");
 
 			statement = connection.createStatement();
+			
+			String query = "";
+			if (DATE_LIMIT) {
+				query = DATE_QUERY;				
+			}
+			else query = ALL_QUERY;
 
-			//String query = "SELECT * FROM positional.positionalData WHERE collect_time > UNIX_TIMESTAMP(2013-11-11);";
-			String query = "SELECT * FROM positional.positionalData ORDER BY collect_time ASC;";
+			//String query = ;
 
 			ResultSet results = statement.executeQuery(query);
 
