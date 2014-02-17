@@ -140,7 +140,7 @@ public class Main extends AbstractAnalysis {
 
 		String headings = "";
 		
-		CUMULATIVE_MODE = false;
+		CUMULATIVE_MODE = true;
 
 
 		for (int i = 0; i < types.length; i++) {
